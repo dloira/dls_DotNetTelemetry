@@ -1,0 +1,9 @@
+<Project>
+    <PropertyGroup>  
+        <LangVersion>latest</LangVersion>
+        <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+        <DefaultTargetVersion>net6.0</DefaultTargetVersion>
+        <Nullable>enable</Nullable>
+		    <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+</Project>

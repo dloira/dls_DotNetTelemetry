@@ -1,0 +1,18 @@
+version: '3.4'
+services:      
+  telemetry-receiver:
+    image: ${DOCKER_REGISTRY:-dls}/telemetry-receiver:${TAG:-latest}
+    build:
+      context: ../
+      dockerfile: dls_DotNetTelemetry/src/Telemetry_Receiver/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT:-Development}
+      - Jaeger__AgentHost=${Jaeger__Host:-jaeger}
+      - Jaeger__AgentPort=${Jaeger__Port:-6831}
+      - Jaeger__Endpoint=${Jaeger__Endpoint:-http://jaeger:14268}
+      - Serilog__WriteTo__1__Args__Uri=${Loki__Endpoint:-http://loki:3100}
+    ports:
+      - "5050:80"
+    depends_on:
+      - jaeger
+      - loki

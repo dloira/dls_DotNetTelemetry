@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{9D372C1C-59B7-46FC-9A22-00B03761F902}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{167F9128-E00A-4E4F-B845-B692E5DF4197}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{FDD916B7-940F-4F2C-A6CB-9BB5FA833E4A}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telemetry_Receiver", "src\Telemetry_Receiver\Telemetry_Receiver.csproj", "{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA} = {9D372C1C-59B7-46FC-9A22-00B03761F902}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E478F85-E5B6-42DE-9A45-2644EA03FDEB}
+	EndGlobalSection
+EndGlobal
