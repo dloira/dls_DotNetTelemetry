@@ -1,3 +1,6 @@
+# Ignore prometheus_data subfolders
+**/prometheus_data/*
+
 *.swp
 *.*~
 project.lock.json

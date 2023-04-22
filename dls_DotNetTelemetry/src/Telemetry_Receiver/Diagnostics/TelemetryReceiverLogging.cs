@@ -22,7 +22,7 @@
         [LoggerMessage(EventId = 200, Level = LogLevel.Error, Message = "Failed processing HTTP event.")]
         public partial void HttpEventProcessingFailed(Exception exception);
 
-        [LoggerMessage(EventId = 201, Level = LogLevel.Debug, Message = "Received HTTP event.")]
+        [LoggerMessage(EventId = 201, Level = LogLevel.Error, Message = "Received HTTP event.")]
         public partial void HttpEventReceived();
 
         [LoggerMessage(EventId = 202, Level = LogLevel.Debug, Message = "Processed HTTP event successfully.")]
