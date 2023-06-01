@@ -55,6 +55,51 @@ namespace Telemetry_Receiver.Diagnostics
             };
         }
 
+        public void RequestedQuery(string queryName)
+        {
+            _logs.RequestedQuery(queryName);
+        }
+
+        public void QueriesFileNameNotSet()
+        {
+            _httpEventProcessingExceptions.Add(1, _defaultTags);
+            _logs.QueriesFileNameNotSet();
+        }
+
+        public void QueryNotUnique(string queryName, string queryXmlFile)
+        {
+            _httpEventProcessingExceptions.Add(1, _defaultTags);
+            _logs.QueryNotUnique(queryName, queryXmlFile);
+        }
+
+        public void CDataNotFoundForQuery(string queryName, string queryXmlFile)
+        {
+            _httpEventProcessingExceptions.Add(1, _defaultTags);
+            _logs.CDataNotFoundForQuery(queryName, queryXmlFile);
+        }
+
+        public void QueriesFileNotFound(string queriesFile)
+        {
+            _logs.QueriesFileNotFound(queriesFile);
+        }
+
+        public void QueryNotFound(string queryName)
+        {
+            _httpEventProcessingExceptions.Add(1, _defaultTags);
+            _logs.QueryNotFound(queryName);
+        }
+
+        public void QueryFound(string queryName)
+        {
+            _logs.QueryFound(queryName);
+        }
+
+        public void ErrorGettingWeatherForecast(Exception exception)
+        {
+            _httpEventProcessingExceptions.Add(1, _defaultTags);
+            _logs.ErrorGettingWeatherForecast(exception);
+        }
+
         public void StartingReceiver()
         {
             _logs.StartingReceiver();

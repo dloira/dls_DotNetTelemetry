@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+  <queries>
+    <query name="GetWeatherForecast">
+      <![CDATA[
+			SELECT w.Id, w.[Date], w.[TemperatureC], w.[Summary]
+      FROM dbo.WeatherForecast w
+			]]>
+    </query>
+  </queries>
+</root>

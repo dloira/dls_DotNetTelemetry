@@ -13,6 +13,8 @@ using OpenTelemetry.Trace;
 using Serilog;
 
 using Telemetry_Receiver.Features.V1.WeatherForecast;
+using Telemetry_Receiver.Infraestructure.QueryReader;
+using Microsoft.Data.SqlClient;
 
 namespace Telemetry_Receiver.Extensions
 {
@@ -20,9 +22,14 @@ namespace Telemetry_Receiver.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var configurationOptions = configuration.GetSection(nameof(TelemetryReceiverOptions))
+                .Get<TelemetryReceiverOptions>();
+
             return services
+                .AddTransient(_ => new SqlConnection(configurationOptions.Database.ConnectionString))
                 .AddMemoryCache()
-                .AddTransient<WeatherForecastService>();
+                .AddTransient<WeatherForecastService>()
+                .AddSingleton<IQueryProviderService, XmlQueryProviderService>();
         }
 
         public static IServiceCollection AddVersioning(this IServiceCollection services)

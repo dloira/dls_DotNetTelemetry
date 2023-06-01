@@ -33,7 +33,7 @@ services:
       - ./prometheus/:/etc/prometheus/
       - ./prometheus_data:/prometheus_data
     command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--config.file=/etc/prometheus/prometheus.yaml'
       - '--storage.tsdb.path=/prometheus_data'
       - '--web.console.libraries=/usr/share/prometheus/console_libraries'
       - '--web.console.templates=/usr/share/prometheus/consoles'
@@ -50,3 +50,14 @@ services:
     entrypoint:
      - /usr/bin/loki
      - -config.file=/etc/config/loki.yaml
+     
+  mssql:
+    build:
+      context: .
+      dockerfile: sqlserver/Dockerfile
+    environment:
+      - SA_PASSWORD=P@55w0rd
+      - ACCEPT_EULA=Y
+      - MSSQL_PID=Express
+    ports:
+      - ${SQL_PORT:-1433}:1433
