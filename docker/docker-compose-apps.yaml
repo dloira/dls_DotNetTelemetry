@@ -11,8 +11,10 @@ services:
       - Jaeger__AgentPort=${Jaeger__Port:-6831}
       - Jaeger__Endpoint=${Jaeger__Endpoint:-http://jaeger:14268}
       - Serilog__WriteTo__1__Args__Uri=${Loki__Endpoint:-http://loki:3100}
+      - TelemetryReceiverOptions__Database__ConnectionString=${Database__ConnectionString:-Server=tcp:mssql,1433;Initial Catalog=Weather;User Id=sa;Password=P@55w0rd;Encrypt=false;MultipleActiveResultSets=true}
     ports:
       - "5050:80"
     depends_on:
       - jaeger
       - loki
+      - mssql

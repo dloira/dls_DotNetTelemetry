@@ -49,6 +49,7 @@ namespace Telemetry_Receiver.Features.V1.WeatherForecast
             try
             {
                 var weatherForecasts = _connection.Query<GetWeatherForecastResponse>(_queryProvider.GetQuery(QueryNames.GET_WEATHERFORECAST)).ToList();
+                _ = weatherForecasts.Count;
             }
             catch (Exception exception)
             {

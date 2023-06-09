@@ -21,4 +21,5 @@ RUN dotnet publish "Telemetry_Receiver.csproj" -c Release -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY ["dls_DotNetTelemetry/src/Telemetry_Receiver/Resources", "/app/Resources/"]
 ENTRYPOINT ["dotnet", "Telemetry_Receiver.dll"]

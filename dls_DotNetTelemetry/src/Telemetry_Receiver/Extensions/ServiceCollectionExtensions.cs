@@ -116,11 +116,11 @@ namespace Telemetry_Receiver.Extensions
                         {
                             options.RecordException = hostingEnvironment.IsDevelopment();
                         })
-                        //.AddSqlClientInstrumentation(options =>
-                        //{
-                        //    options.RecordException = hostingEnvironment.IsDevelopment();
-                        //    options.SetDbStatementForText = hostingEnvironment.IsDevelopment();
-                        //})
+                        .AddSqlClientInstrumentation(options =>
+                        {
+                            options.RecordException = hostingEnvironment.IsDevelopment();
+                            options.SetDbStatementForText = hostingEnvironment.IsDevelopment();
+                        })
                         .AddSource(nameof(TelemetryReceiver))
                         .AddJaegerExporter();
 
