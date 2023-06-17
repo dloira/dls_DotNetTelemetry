@@ -17,7 +17,6 @@ using System.Diagnostics;
 namespace Telemetry_Receiver.Features.V1.WeatherForecast
 {
     public class WeatherForecastService
-        :IWeatherForecastService
     {
         private readonly SqlConnection _connection;
         private readonly IQueryProviderService _queryProvider;
