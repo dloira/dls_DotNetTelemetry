@@ -13,7 +13,7 @@ namespace Telemetry_Receiver.Diagnostics
 
         private readonly TelemetryReceiverLogging _logs;
         private readonly IOptionsMonitor<TelemetryReceiverOptions> _options;
-        private Meter _receiverMeter = default!;
+        private readonly Meter _receiverMeter;
 
         private Counter<long> _httpEventProcessingExceptions = default!;
         private Counter<long> _httpEventProcessingCount = default!;
@@ -34,8 +34,6 @@ namespace Telemetry_Receiver.Diagnostics
 
         private void InitializeCounters(string environmentName)
         {
-            _receiverMeter = new Meter(nameof(TelemetryReceiver));
-
             _httpEventProcessingCount = _receiverMeter.CreateCounter<long>(
                 name: TelemetryReceiverConstants.HTTP_EVENT_PROCESSING_COUNT_METRIC_NAME,
                 description: TelemetryReceiverConstants.HTTP_EVENT_PROCESSING_COUNT_METRIC_DESCRIPTION);
@@ -100,21 +98,6 @@ namespace Telemetry_Receiver.Diagnostics
             _logs.ErrorGettingWeatherForecast(exception);
         }
 
-        public void StartingReceiver()
-        {
-            _logs.StartingReceiver();
-        }
-
-        public void StartedReceiver()
-        {
-            _logs.StartedReceiver();
-        }
-
-        public void StoppedReceiver()
-        {
-            _logs.StoppedReceiver();
-        }
-
         public void EventProcessingFailed(Exception error)
         {
             _httpEventProcessingExceptions.Add(1, _defaultTags);
@@ -129,9 +112,14 @@ namespace Telemetry_Receiver.Diagnostics
             _logs.HttpEventReceived();
         }
 
-        public void EventProcessed(long processingTime)
+        public void EventProcessed(long processingTime, string processorName)
         {
-            _httpEventProcessingTime.Record(processingTime, _defaultTags.ToArray());
+            var tags = _defaultTags.Concat(new KeyValuePair<string, object?>[]
+            {
+                new (TelemetryReceiverConstants.COUNTER_TAG_PROCESSOR_NAME, processorName)
+            });
+
+            _httpEventProcessingTime.Record(processingTime, tags.ToArray());
 
             _logs.HttpEventProcessed();
         }

@@ -16,6 +16,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "files", "files", "{FDD916B7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Telemetry_Receiver", "src\Telemetry_Receiver\Telemetry_Receiver.csproj", "{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Telemetry_Receiver.FunctionalTests", "test\Telemetry_Receiver.FunctionalTests\Telemetry_Receiver.FunctionalTests.csproj", "{2DD1BCED-5408-428B-B9DE-5F5949C86D78}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -26,12 +28,17 @@ Global
 		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DD1BCED-5408-428B-B9DE-5F5949C86D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DD1BCED-5408-428B-B9DE-5F5949C86D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DD1BCED-5408-428B-B9DE-5F5949C86D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DD1BCED-5408-428B-B9DE-5F5949C86D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{C5F678D8-7268-4BC2-81D3-FCD48D94C4DA} = {9D372C1C-59B7-46FC-9A22-00B03761F902}
+		{2DD1BCED-5408-428B-B9DE-5F5949C86D78} = {167F9128-E00A-4E4F-B845-B692E5DF4197}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4E478F85-E5B6-42DE-9A45-2644EA03FDEB}

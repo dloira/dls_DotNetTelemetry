@@ -31,5 +31,16 @@ namespace Telemetry_Receiver.Features.V1.WeatherForecast
 
             return Ok(response);
         }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetWeatherForecastResponse), 200)]
+        [ProducesResponseType(400)]
+        [Route("health")]
+        public IActionResult Health()
+        {
+            var response = Task.FromResult(_weatherForecastService.GetHealthSync());
+
+            return Ok(response);
+        }
     }
 }

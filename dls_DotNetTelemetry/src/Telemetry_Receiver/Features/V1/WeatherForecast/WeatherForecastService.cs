@@ -12,15 +12,17 @@ using Telemetry_Receiver.Infraestructure.QueryReader;
 using Microsoft.Data.SqlClient;
 using Azure.Core;
 using Dapper;
+using System.Diagnostics;
 
 namespace Telemetry_Receiver.Features.V1.WeatherForecast
 {
     public class WeatherForecastService
+        :IWeatherForecastService
     {
         private readonly SqlConnection _connection;
         private readonly IQueryProviderService _queryProvider;
 
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
         private static readonly string[] Summaries = new[]
         {
@@ -37,39 +39,51 @@ namespace Telemetry_Receiver.Features.V1.WeatherForecast
             _httpClient = GetAddressWebApiClient();
         }
 
-        internal async Task<IEnumerable<GetWeatherForecastResponse>?> GetWeatherForecastDataAsync()
+        public async Task<IEnumerable<GetWeatherForecastResponse>?> GetWeatherForecastDataAsync()
         {
             _diagnostics.EventReceived();
 
-            // Calling a public API to retrieve random data
-            var response = await _httpClient.GetAsync("api/v2/addresses");
-            var responseContent = JsonConvert.DeserializeObject<AddressApiModel>(await response.Content.ReadAsStringAsync());
-
-            // Connecting to database to retrieve random data
             try
             {
-                var weatherForecasts = _connection.Query<GetWeatherForecastResponse>(_queryProvider.GetQuery(QueryNames.GET_WEATHERFORECAST)).ToList();
-                _ = weatherForecasts.Count;
+                var watchProcesor = Stopwatch.StartNew();
+
+                // Calling a public API to retrieve random data
+                var response = await _httpClient.GetAsync("api/v2/addresses");
+                var responseContent = JsonConvert.DeserializeObject<AddressApiModel>(await response.Content.ReadAsStringAsync());
+
+                // Connecting to database to retrieve data for time consuming
+                try
+                {
+                    var weatherForecasts = _connection.Query<GetWeatherForecastResponse>(_queryProvider.GetQuery(QueryNames.GET_WEATHERFORECAST)).ToList();
+                    _ = weatherForecasts.Count;
+                }
+                catch (Exception exception)
+                {
+                    _diagnostics.ErrorGettingWeatherForecast(exception);
+                }
+                finally
+                {
+                    _connection.Close();
+                }
+
+                _diagnostics.EventProcessed(watchProcesor.ElapsedMilliseconds, nameof(WeatherForecastService));
+
+                return Enumerable.Range(1, 5).Select(index => new GetWeatherForecastResponse
+                {
+                    City = responseContent.City,
+                    Address = responseContent.StreetName + " " + responseContent.StreetAddress,
+                    Date = DateTime.Now.AddDays(index),
+                    TemperatureC = Random.Shared.Next(-20, 55),
+                    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+                })
+                .ToArray();
             }
-            catch (Exception exception)
+            catch(Exception exception)
             {
-                _diagnostics.ErrorGettingWeatherForecast(exception);
-            }
-            finally
-            {
-                _connection.Close();
+                _diagnostics.EventProcessingFailed(exception);
             }
 
-
-            return Enumerable.Range(1, 5).Select(index => new GetWeatherForecastResponse
-            {
-                City = responseContent.City,
-                Address = responseContent.StreetName + " " + responseContent.StreetAddress,
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return null;
         }
 
         private HttpClient GetAddressWebApiClient()
@@ -82,6 +96,18 @@ namespace Telemetry_Receiver.Features.V1.WeatherForecast
             client.Timeout = TimeSpan.FromSeconds(10);
 
             return client;
+        }
+
+        internal Task<GetWeatherForecastResponse> GetHealthSync()
+        {
+            return Task.FromResult(new GetWeatherForecastResponse
+            {
+                City = "City",
+                Address = "Address",
+                Date = DateTime.Now,
+                TemperatureC = 0,
+                Summary = "Summary"
+            });
         }
     }
 }
