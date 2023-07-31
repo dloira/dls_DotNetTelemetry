@@ -31,4 +31,10 @@
     <PackageReference Include="Dapper" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Resources\DataAccessQueries.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
