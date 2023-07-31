@@ -120,11 +120,7 @@ private void InitializeCounters(string environmentName)
         name: TelemetryReceiverConstants.HTTP_EVENT_PROCESSING_TIME_METRIC_NAME,
         description: TelemetryReceiverConstants.HTTP_EVENT_PROCESSING_TIME_METRIC_DESCRIPTION);
 
-    _defaultTags = new KeyValuePair<string, object?>[]
-    {
-            new KeyValuePair<string, object?>(TelemetryReceiverConstants.COUNTER_TAG_ENVIRONMENT_NAME, environmentName),
-            new KeyValuePair<string, object?>(TelemetryReceiverConstants.COUNTER_TAG_MACHINE_NAME, Environment.MachineName)
-    };
+    ...
 }
 ```
 
