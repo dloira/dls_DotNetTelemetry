@@ -105,7 +105,7 @@ namespace Telemetry_Receiver.Extensions
                 .AddSingleton<TelemetryReceiverLogging>()
                 .AddSingleton<TelemetryReceiverDiagnostics>();
 
-            // add instrumentaiton and metrics
+            // add instrumentation and metrics
             services.AddOpenTelemetry()
                 .ConfigureResource(configurerResource)
                 .WithTracing(tracingBuilder =>
