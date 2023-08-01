@@ -277,37 +277,84 @@ Finally, the logs were sent to Loki in real time and you could inspect them acce
 
 ![Concept diagram](https://github.com/dloira/dls_DotNetTelemetry/blob/master/img/logs.png)
 
-## Running the tests
+## Running unit tests
 
-Running the Telemetry_Receiver.FunctionalTests for XUnit checks is also an option coded for unit testing.
+The previous sections focus was to explain the way for providing observability into a web services façade, nevertheless,  this repository also contains a clever approach to run the unit tests, without the need to have the API up in a separate instance of Visual Studio.
 
-Coming soon!
+As you could check, the project **Telemetry_Receiver.FunctionalTests** is using XUnit as the testing framework and its features were taken advantage. To make it as easier as possible, a health check endpoint was added to the weather forecast endpoint in order to call it avoiding any other third party integration.
 
+The tests with Fluent Assertions was coded into **WeatherForecastControllerTests** public class and the health check endpoint response tested.
+
+```c#
+public async Task health_should_work()
+{
+    var response = await _fixture.TestServer.CreateClient()
+        .GetAsync(Api.V1.Configuration.Get.Configuration());
+
+    response.Should()
+        .NotBeNull();
+
+    response.StatusCode
+        .Should()
+        .Be(HttpStatusCode.OK);
+}
+```
+
+However, the really cool feature is behind the **[Collection(nameof(WeatherForecastServerCollection))]** attribute, where XUnit provides the way to inject a IHost server built in **WeatherForecastServerFixture** public class on which the weather forecast API will run by the Microsoft.AspNet hosting.
+
+```c#
+private async Task CreateServerHost()
+{
+    _host = new HostBuilder()
+        .UseEnvironment("Development")
+        .ConfigureWebHost(builder =>
+        {
+            builder
+            .ConfigureServices(services => services.AddSingleton<IServer>(serviceProvider => new TestServer(serviceProvider)))
+            .UseStartup<TestStartup>();
+        })
+        .ConfigureAppConfiguration((_, configurationBuilder) =>
+        {
+            BuildTestconfigurationBuilder(configurationBuilder);
+        })
+        .Build();
+
+    await _host.StartAsync();
+
+    TestServer = _host.GetTestServer();
+}
+```
+
+You can execute de test clicking on **Telemetry_Receiver.FunctionalTests** project with secondary button and select Run All Tests menu option. 
+
+![Concept diagram](https://github.com/dloira/dls_DotNetTelemetry/blob/master/img/unit-test.png)
 
 ## Built With
 
 * [.Net-6.0](https://dotnet.microsoft.com/en-us/download/dotnet/6.0) - The .Net toolkit framework
 * [VisualStudio-22](https://visualstudio.microsoft.com/es/vs/community/) - IDE
 * [Docker-20.10.13](https://www.docker.com/) - Containers
-* [Newtonsoft.Json-13.0.3"]() - 
-* [Microsoft.Data.SqlClient-5.1.0"]() - MSSQL client
-* [OpenTelemetry.Exporter.Console-1.4.0"]() - 
-* [OpenTelemetry.Exporter.Jaeger-1.4.0"]() - 
-* [OpenTelemetry.Exporter.Prometheus-1.3.0-rc.2"]() - 
-* [OpenTelemetry.Exporter.Prometheus.AspNetCore-1.4.0-rc.4"]() - 
-* [OpenTelemetry.Extensions.Hosting-1.4.0"]() - 
-* [OpenTelemetry.Instrumentation.AspNetCore-1.0.0-rc9.14"]() - 
-* [OpenTelemetry.Instrumentation.Http-1.0.0-rc9.14"]() - 
-* [OpenTelemetry.Instrumentation.Process-0.5.0-beta.2"]() - 
-* [OpenTelemetry.Instrumentation.Runtime-1.1.0-rc.2"]() - 
-* [OpenTelemetry.Instrumentation.SqlClient-1.0.0-rc9.14"]() - 
-* [Serilog.AspNetCore-6.1.0"]() - 
-* [Serilog.Settings.Configuration-3.4.0"]() - 
-* [Serilog.Sinks.Console-4.1.0"]() - 
-* [Serilog.Sinks.File-5.0.0"]() - 
-* [Serilog.Sinks.Grafana.Loki-8.1.0"]() - 
-* [Swashbuckle.AspNetCore-6.5.0"]() - 
-* [Dapper2.0.123"]() - 
+* [Newtonsoft.Json-13.0.3](https://www.newtonsoft.com/json) - JSON parser
+* [Microsoft.Data.SqlClient-5.1.0](https://github.com/dotnet/SqlClient) - MSSQL client
+* [OpenTelemetry.Exporter.Console-1.4.0](https://opentelemetry.io/) - OpenTelemetry
+* [OpenTelemetry.Exporter.Jaeger-1.4.0](https://opentelemetry.io/) - Jaeger exporter for OpenTelemetry
+* [OpenTelemetry.Exporter.Prometheus-1.3.0-rc.2](https://opentelemetry.io/) - Prometheus exporter for OpenTelemetry
+* [OpenTelemetry.Exporter.Prometheus.AspNetCore-1.4.0-rc.4](https://opentelemetry.io/) - ASP.Net Core middleware for hosting OpenTelemetry
+* [OpenTelemetry.Extensions.Hosting-1.4.0](https://opentelemetry.io/) - 
+* [OpenTelemetry.Instrumentation.AspNetCore-1.0.0-rc9.14](https://opentelemetry.io/) - ASP.Net Core instrumentation for OpenTelemetry
+* [OpenTelemetry.Instrumentation.Http-1.0.0-rc9.14](https://opentelemetry.io/) - HTTP Core instrumentation for OpenTelemetry
+* [OpenTelemetry.Instrumentation.Process-0.5.0-beta.2](https://opentelemetry.io/) - Dotnet process instrumentation for OpenTelemetry
+* [OpenTelemetry.Instrumentation.Runtime-1.1.0-rc.2](https://opentelemetry.io/) - Dotnet runtime instrumentation for OpenTelemetry
+* [OpenTelemetry.Instrumentation.SqlClient-1.0.0-rc9.14](https://opentelemetry.io/) - SqlClient instrumentation for OpenTelemetry
+* [Serilog.AspNetCore-6.1.0](https://github.com/serilog/serilog-aspnetcore) - ASP.Net Core logging integration with Serilog
+* [Serilog.Settings.Configuration-3.4.0](https://github.com/serilog/serilog-aspnetcore) - Microsoft.Extensions.Configuration logging integration with Serilog
+* [Serilog.Sinks.Console-4.1.0](https://github.com/serilog/serilog-aspnetcore) - A Serilog sink that writes log events to the console/terminal
+* [Serilog.Sinks.File-5.0.0](https://github.com/serilog/serilog-aspnetcore) - A Serilog sink that writes log events in plain or JSON format
+* [Serilog.Sinks.Grafana.Loki-8.1.0](https://github.com/serilog/serilog-aspnetcore) - A Serilog sink that writes log events to Grafana Loki
+* [Swashbuckle.AspNetCore-6.5.0]() - Swagger tools for documentation APIs
+* [Dapper-2.0.123](https://github.com/DapperLib/Dapper) - High performance Micro-ORM
+* [Xunit-2.4.2](https://github.com/xunit) - Testing framework
+* [FluentAssertions-6.10.0](https://fluentassertions.com/) - Testing utility
 
 
 ## Versioning
