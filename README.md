@@ -14,7 +14,21 @@ The main idea of the source code hosted in this repository is to expose an API e
 
 Please, find below the concept diagram for overview better understanding.
 
-![Concept diagram](https://github.com/dloira/dls_DotNetTelemetry/blob/master/concept_diagram.jpg)
+```mermaid
+sequenceDiagram
+    User->>Weather API: getWeatherForecast
+    activate Weather API
+    Weather API->>Address API: getAddress
+    activate Address API
+    Address API-->>Weather API: response
+    deactivate Address API
+    Weather API->>MSSQL: query Select
+    activate MSSQL
+    MSSQL-->>Weather API: data
+    deactivate MSSQL
+    Weather API-->>User: response
+    deactivate Weather API
+```
 
 Out of the box .NET gives diagnostics and instrumentation with OpenTelemetry full integrated; take a look for a while in this Microsoft official link https://learn.microsoft.com/en-us/dotnet/core/diagnostics/observability-with-otel
 
