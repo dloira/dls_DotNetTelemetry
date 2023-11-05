@@ -1,4 +1,4 @@
-# dls_DotNetTelemetry
+# DotNet observability with Prometheus, Jaeger, Loki and Grafana
 
 Here, you could find an approach to face the Observability patterns for a dotnet application ecosystem. The idea behind is to allow the teams for troubleshooting and helping them with the question, “Why and when is this happening?”. 
 
@@ -370,7 +370,23 @@ You can execute de test clicking on **Telemetry_Receiver.FunctionalTests** proje
 * [Xunit-2.4.2](https://github.com/xunit) - Testing framework
 * [FluentAssertions-6.10.0](https://fluentassertions.com/) - Testing utility
 
-
 ## Versioning
 
 I use [SemVer](http://semver.org/) for versioning. For the versions available, see the tags on this repository. 
+
+# Quick Start
+
+* Clone the repository.
+* Open terminal console and change directory to be placed in project root folder.
+* Run docker compose to up the containers: 
+
+```powershell
+docker compose -f docker/docker-compose.yaml -f docker/docker-compose-apps.yaml up --build -d
+```
+
+* Grafana login will be available on: http://localhost:3000/
+* Run docker compose to stop the containers: 
+
+```powershell
+docker compose -f docker/docker-compose.yaml -f docker/docker-compose-apps.yaml down
+```
